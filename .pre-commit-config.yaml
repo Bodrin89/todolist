@@ -1,0 +1,24 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-yaml
+      - id: double-quote-string-fixer
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        exclude: ^tests/fixtures/
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.9.0
+    hooks:
+      - id: reorder-python-imports
+        args: [
+          --application-directories, '.:src',
+          --py38-plus,
+          --add-import, 'from __future__ import annotations',
+        ]
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args: [ '--config=setup.cfg' ]
