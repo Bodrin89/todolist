@@ -1,6 +1,6 @@
 name: Build and deploy docker hub
 on:
-  [push, pull_request]:
+  push:
     branches:
       - 'master'
 jobs:
