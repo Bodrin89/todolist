@@ -12,6 +12,6 @@ jobs:
       - name: docker build
         run: docker build -t vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GIT_HUB_RUN_ID .
       - name: docker_login
-        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ DOCKERHUB_USERNAME }} --password-stdin
+        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: docker push
         run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GIT_HUB_RUN_ID
