@@ -6,13 +6,12 @@ on:
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: clone code
-        uses: actions/checkout@v2
-      - name: docker build
-        run: docker build -t vbodrin/diplom_work:$GITHUB_REF_NAME-$GIT_HUB_RUN_ID .
-      - name: docker_login
-        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ DOCKERHUB_USERNAME }} --password-stdin
-      -name: docker push
-        run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GIT_HUB_RUN_ID
+      steps:
+        - name: clone code
+          uses: actions/checkout@v2
+        - name: docker build
+          run: docker build -t vbodrin/diplom_work:$GITHUB_REF_NAME-$GIT_HUB_RUN_ID .
+        - name: docker_login
+          run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ DOCKERHUB_USERNAME }} --password-stdin
+        -name: docker push
+          run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GIT_HUB_RUN_ID
