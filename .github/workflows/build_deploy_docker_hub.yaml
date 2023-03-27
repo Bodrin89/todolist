@@ -25,13 +25,13 @@ jobs:
       - name: render configs
         run: |
           mkdir 2
-          cat .env | envsubst > todolist/.env
+          cat .env.dist | envsubst > todolist/.env.dist
       - name: load_test
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
-          source: "todolist/.env"
+          source: "todolist/.env.dist"
           target: "2"
           strip_components: 1
