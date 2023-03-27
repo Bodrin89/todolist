@@ -29,3 +29,5 @@ jobs:
           source: "todolist/test.txt"
           target: "diplom_work"
           strip_components: 1
+
+          "WWW"
