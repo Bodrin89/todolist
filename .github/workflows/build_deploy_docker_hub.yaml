@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: create dir
         run: mkdir diploma_work
-      - uses: action/checkout@v3
+      - uses: action/checkout@v2
       - uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
           vault_key: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
