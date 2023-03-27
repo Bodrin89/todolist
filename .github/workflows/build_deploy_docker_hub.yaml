@@ -4,21 +4,21 @@ on:
     branches:
       - 'master'
 jobs:
-  build_and_push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: clone code
-        uses: actions/checkout@v2
-      - name: docker build
-        run: docker build -t vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
-      - name: docker_login
-        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-      - name: docker push
-        run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+#  build_and_push:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: clone code
+#        uses: actions/checkout@v2
+#      - name: docker build
+#        run: docker build -t vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+#      - name: docker_login
+#        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+#      - name: docker push
+#        run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
 
   load_server:
     runs-on: ubuntu-latest
-    needs: build_and_push
+#    needs: build_and_push
     steps:
       - name: load_test
         uses: appleboy/scp-action@master
@@ -27,5 +27,5 @@ jobs:
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
           source: "todolist/test.txt"
-          target: "diplom_work"
+          target: "1"
           strip_components: 1
