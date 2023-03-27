@@ -34,7 +34,6 @@ services:
 
   collect_static:
     build: .
-    image: vladimirbodrin/diplom_work
     env_file: .env
     entrypoint: ''
     volumes:
