@@ -32,5 +32,6 @@ jobs:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
-          source: "./test.txt"
+          source: "todolist/test.txt"
           target: "1"
+          strip_components: 1
