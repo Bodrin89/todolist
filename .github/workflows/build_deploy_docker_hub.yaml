@@ -34,8 +34,9 @@ jobs:
           target: "diploma_work"
           strip_components: 1
       - name: Test
-        run:
-          cat deploy/docker-compose.yaml | envsubst > docker-compose-ci.yaml
+        run: |
+          mkdir ci
+          cat deploy/docker-compose.yaml | envsubst > ci/docker-compose-ci.yaml
       - name: Run compose
         uses: appleboy/scp-action@master
         with:
