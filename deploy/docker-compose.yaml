@@ -16,7 +16,7 @@ services:
 
   api:
 #    image: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-    image: vladimirbodrin/diplom_work:${{ github.ref }}
+    image: vladimirbodrin/diplom_work:${{ github.ref }}-${{ github.id }}
     env_file:
       - .env
     depends_on:
