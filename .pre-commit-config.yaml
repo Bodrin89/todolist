@@ -1,27 +1,28 @@
 ---
 repos:
-    - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v4.4.0
-      hooks:
-          - id: double-quote-string-fixer
-          - id: debug-statements
-          - id: trailing-whitespace
-            exclude: ^tests/fixtures/
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: double-quote-string-fixer
+      - id: debug-statements
+      - id: trailing-whitespace
+        exclude: ^tests/fixtures/
 
-    - repo: https://github.com/asottile/reorder_python_imports
-      rev: v3.9.0
-      hooks:
-          - id: reorder-python-imports
-            args: [--application-directories, .:src, --py38-plus, --add-import, from __future__ import annotations]
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.9.0
+    hooks:
+      - id: reorder-python-imports
+        args: [--application-directories, .:src, --py38-plus, --add-import, from __future__ import annotations]
 
-    - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-      rev: 0.2.1    # or other specific tag
-      hooks:
-          - id: yamlfmt
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.2.1        # or other specific tag
+    hooks:
+      - id: yamlfmt
+        args: [--mapping, '4', --sequence, '4', --offset, '2', --colons, --width, '150']
 
-    - repo: https://github.com/pycqa/flake8
-      rev: 6.0.0
-      hooks:
-          - id: flake8
-            args: [--config=setup.cfg]
-            exclude: migrations
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args: [--config=setup.cfg]
+        exclude: migrations
