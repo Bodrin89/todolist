@@ -44,7 +44,7 @@ jobs:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
-          source: "deploy123/docker-compose.yaml"
+          source: "docker-compose/docker-compose.yaml"
           target: "diploma_work"
           strip_components: 1
       - name: Run compose
