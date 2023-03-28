@@ -15,7 +15,8 @@ services:
       interval: 3s
 
   api:
-    image: vladimirbodrin/diplom_work:${{ github.ref }}-$GITHUB_RUN_ID
+#    image: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: vladimirbodrin/diplom_work:${{ github.ref }}
     env_file:
       - .env
     depends_on:
