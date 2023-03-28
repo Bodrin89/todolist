@@ -41,14 +41,14 @@ jobs:
       - name: render docker-compose
         run: |
           mkdir docker-compose
-          cat deploy/docker-compose-ci.yaml | envsubst > docker-compose/docker-compose-ci.yaml
+          cat deploy/docker-compose-ci.yaml | envsubst > docker-compose/docker-compose.yaml
       - name: Copy docker-compose
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
-          source: "docker-compose/docker-compose-ci.yaml"
+          source: "docker-compose/docker-compose.yaml"
           target: "diploma_work"
           strip_components: 1
       - name: Run compose
