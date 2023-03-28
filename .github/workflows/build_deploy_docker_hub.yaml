@@ -52,22 +52,21 @@ jobs:
           target: "diploma_work"
           strip_components: 1
       - name: Run compose
-        uses: appleboy/scp-action@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
-          run: cd diploma_work
           script: |
             cd diploma_work
-#            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose pull
-#            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose up -d
-#      - name: Cleanup
-#        if: always()
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.SERV_HOST }}
-#          username: ${{ secrets.SERV_USERNAME }}
-#          password: ${{ secrets.SERV_PASSWORD }}
-#          script: |
-#            echo {{ secrets.SERV_PASSWORD }} \ sudo -S docker system prune -a -f
+            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose pull
+            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose up -d
+      - name: Cleanup
+        if: always()
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERV_HOST }}
+          username: ${{ secrets.SERV_USERNAME }}
+          password: ${{ secrets.SERV_PASSWORD }}
+          script: |
+            echo {{ secrets.SERV_PASSWORD }} \ sudo -S docker system prune -a -f
