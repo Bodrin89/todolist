@@ -20,10 +20,10 @@ jobs:
     needs: build_and_push
     steps:
       - uses: actions/checkout@v3
-        name: render configs
-          run: |
-            mkdir deploy
-          # cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
+      - name: render configs
+        run: |
+          mkdir deploy
+        # cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
       - uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
           vault_key: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
