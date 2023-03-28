@@ -18,6 +18,7 @@ pre-commit = "^3.2.1"
 flake8 = "^6.0.0"
 flake8-bugbear = "^23.3.12"
 ansible-vault-win = "^1.0.0"
+pip = "^23.0.1"
 
 [build-system]
 requires = ["poetry-core"]
