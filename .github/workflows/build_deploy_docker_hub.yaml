@@ -24,7 +24,6 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
-
       - uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
           vault_key: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
@@ -69,4 +68,4 @@ jobs:
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
-            echo {{ secrets.SERV_PASSWORD }} \ sudo -S docker system prune -a -f
+            echo {{ secrets.SERV_PASSWORD }} | sudo -S docker system prune -a -f
