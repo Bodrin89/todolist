@@ -10,13 +10,11 @@ jobs:
       - name: clone code
         uses: actions/checkout@v2
       - name: docker build
-#        run: docker build -t vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
-        run: docker build -t vladimirbodrin/diplom_work:latest .
+        run: docker build -t vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
       - name: docker_login
         run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: docker push
-#        run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-        run: docker push vladimirbodrin/diplom_work:latest
+        run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
@@ -35,6 +33,8 @@ jobs:
           source: "deploy/*"
           target: "diploma_work"
           strip_components: 1
+      - name: Mkdir
+        run: mkdir test
       - name: Run compose
         uses: appleboy/scp-action@master
         with:
