@@ -57,7 +57,7 @@ jobs:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
-          run: |
+          script: |
             cd diploma_work
             echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose pull
             echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose up -d
@@ -68,5 +68,5 @@ jobs:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
-          run: |
+          script: |
             echo {{ secrets.SERV_PASSWORD }} \ sudo -S docker system prune -a -f
