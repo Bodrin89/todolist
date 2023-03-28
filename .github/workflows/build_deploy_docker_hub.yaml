@@ -68,4 +68,4 @@ jobs:
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
-            echo {{ secrets.SERV_PASSWORD }} | sudo -S docker system prune -a -f
+            echo {{ secrets.SERV_PASSWORD }} \ sudo -S docker system prune -a -f
