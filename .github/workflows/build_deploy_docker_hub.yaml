@@ -40,7 +40,7 @@ jobs:
       - name: render docker-compose
         run: |
           mkdir docker-compose
-          cat deploy/docker-compose-ci.yaml | envsubst > docker-compose/docker-compose.yaml
+          cat deploy/docker-compose.yaml | envsubst > docker-compose/docker-compose.yaml
       - name: Copy docker-compose
         uses: appleboy/scp-action@master
         with:
@@ -68,4 +68,4 @@ jobs:
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
-            echo {{ secrets.SERV_PASSWORD }} \ sudo -S docker system prune -a -f
+            echo {{ secrets.SERV_PASSWORD }} | sudo -S docker system prune -a -f
