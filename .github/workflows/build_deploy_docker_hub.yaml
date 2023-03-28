@@ -57,6 +57,7 @@ jobs:
           host: ${{ secrets.SERV_HOST }}
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
+          run: cd diploma_work
           script: |
             cd diploma_work
 #            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose pull
