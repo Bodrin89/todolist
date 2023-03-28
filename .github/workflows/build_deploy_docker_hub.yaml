@@ -23,7 +23,7 @@ jobs:
       - name: render configs
         run: |
           mkdir deploy123
-          cat docker-compose.yaml | envsubst > deploy123/docker-compose.yaml
+          cat deploy/docker-compose.yaml | envsubst > deploy123/docker-compose.yaml
       - uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
           vault_key: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
