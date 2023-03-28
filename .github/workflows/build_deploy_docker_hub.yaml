@@ -10,12 +10,11 @@ jobs:
       - name: clone code
         uses: actions/checkout@v2
       - name: docker build
-#        run: docker build -t vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
-        run: docker build -t vladimirbodrin/diplom_work:${{ github.ref }} .
+        run: docker build -t vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
       - name: docker_login
         run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: docker push
-        run: docker push vladimirbodrin/diplom_work:${{ github.ref }}
+        run: docker push vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
@@ -35,19 +34,19 @@ jobs:
           source: "deploy/*"
           target: "diploma_work"
           strip_components: 1
-#      - name: render docker-compose
-#        run: |
-#          mkdir docker-compose
-#          cat deploy/docker-compose.yaml | envsubst > docker-compose/docker-compose.yaml
-#      - name: Copy docker-compose
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.SERV_HOST }}
-#          username: ${{ secrets.SERV_USERNAME }}
-#          password: ${{ secrets.SERV_PASSWORD }}
-#          source: "docker-compose/docker-compose.yaml"
-#          target: "diploma_work"
-#          strip_components: 1
+      - name: render docker-compose
+        run: |
+          mkdir docker-compose
+          cat deploy/docker-compose-ci.yaml | envsubst > docker-compose/docker-compose-ci.yaml
+      - name: Copy docker-compose
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERV_HOST }}
+          username: ${{ secrets.SERV_USERNAME }}
+          password: ${{ secrets.SERV_PASSWORD }}
+          source: "docker-compose/docker-compose-ci.yaml"
+          target: "diploma_work"
+          strip_components: 1
       - name: Run compose
         uses: appleboy/scp-action@master
         with:
@@ -56,8 +55,8 @@ jobs:
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
             cd diploma_work
-            docker-compose pull
-            docker-compose-ci up -d
+            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose pull
+            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose up -d
       - name: Cleanup
         if: always()
         uses: appleboy/scp-action@master
@@ -66,4 +65,4 @@ jobs:
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
-            docker system prune -a -f
+            echo {{ secrets.SERV_PASSWORD }} \ sudo -S docker system prune -a -f
