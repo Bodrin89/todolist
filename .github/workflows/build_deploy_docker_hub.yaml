@@ -46,12 +46,12 @@ jobs:
             cd diploma_work
             docker-compose pull
             docker-compose-ci up -d
-      - name: Cleanup
-        if: always()
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERV_HOST }}
-          username: ${{ secrets.SERV_USERNAME }}
-          password: ${{ secrets.SERV_PASSWORD }}
-          script: |
-            docker system prune -a -f
+#      - name: Cleanup
+#        if: always()
+#        uses: appleboy/scp-action@master
+#        with:
+#          host: ${{ secrets.SERV_HOST }}
+#          username: ${{ secrets.SERV_USERNAME }}
+#          password: ${{ secrets.SERV_PASSWORD }}
+#          script: |
+#            docker system prune -a -f
