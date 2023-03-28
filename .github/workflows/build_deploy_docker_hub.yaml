@@ -36,7 +36,6 @@ jobs:
       - name: Test
         run: |
           mkdir ci
-          cat deploy/docker-compose.yaml | envsubst > ci/docker-compose-ci.yaml
       - name: Run compose
         uses: appleboy/scp-action@master
         with:
