@@ -19,6 +19,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
+    env:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     steps:
       - uses: actions/checkout@v3
       - uses: anthonykgross/ansible-vault-cli-github-action@v1
