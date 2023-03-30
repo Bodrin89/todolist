@@ -50,8 +50,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-
+    'rest_framework',
 ]
+if DEBUG:
+    INSTALLED_APPS += [
+        'django_extensions',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,5 +147,3 @@ STATIC_ROOT = BASE_DIR.joinpath('static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.User'
-
-
