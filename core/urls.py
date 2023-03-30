@@ -1,5 +1,9 @@
 from __future__ import annotations
 
-from os import path
+from django.urls import path
 
-urlpatterns = []
+from core.views import SingUpView
+
+urlpatterns = [
+    path('signup', SingUpView.as_view(), name='signup')
+]
