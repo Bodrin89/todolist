@@ -22,7 +22,7 @@ class SingUpView(CreateAPIView):
 class LoginView(CreateAPIView):
     serializer_class = LoginSerializer
 
-    def __create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         login(request=request, user=serializer.save())
