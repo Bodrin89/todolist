@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from django.urls import path
-from rest_framework import routers
 
 from core.views import LoginView
 from core.views import ProfileView
