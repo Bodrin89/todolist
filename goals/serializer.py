@@ -6,12 +6,12 @@ from core.serializer import ProfileSerializer
 from goals.models import GoalCategory
 
 
-class GoalCreateSerializer(serializers.ModelSerializer):
+class GoalCategoryCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = GoalCategory
-        read_only_fields = ('id', 'created', 'updated', 'user')
+        read_only_fields = ('id', 'created', 'updated', 'user', 'is_deleted')
         fields = '__all__'
 
 
@@ -20,5 +20,5 @@ class GoalCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GoalCategory
+        read_only_fields = ('id', 'created', 'updated', 'user', 'is_deleted')
         fields = '__all__'
-        read_only_fields = ('id', 'created', 'updated', 'user')
