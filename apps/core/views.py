@@ -8,11 +8,11 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.models import User
-from core.serializer import CreateUserSerializer
-from core.serializer import LoginSerializer
-from core.serializer import ProfileSerializer
-from core.serializer import UpdatePasswordSerializer
+from apps.core.models import User
+from apps.core.serializer import CreateUserSerializer
+from apps.core.serializer import LoginSerializer
+from apps.core.serializer import ProfileSerializer
+from apps.core.serializer import UpdatePasswordSerializer
 
 
 class SingUpView(CreateAPIView):

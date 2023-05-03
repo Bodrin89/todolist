@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.exceptions import ValidationError
 
-from core.models import User
+from apps.core.models import User
 
 
 class CreateUserSerializer(serializers.ModelSerializer):

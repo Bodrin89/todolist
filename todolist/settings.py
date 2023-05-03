@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
 import environ
@@ -50,8 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
-    'goals',
-    'core',
+    'apps.goals',
+    'apps.core',
     'social_django',
 ]
 if DEBUG:

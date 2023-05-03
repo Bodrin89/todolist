@@ -31,7 +31,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./todolist:/code/todolist/
-      - ./core:/code/core/
+      - ./apps:/code/apps/
 
   collect_static:
     build: .
