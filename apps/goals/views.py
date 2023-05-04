@@ -10,6 +10,9 @@ from rest_framework.filters import SearchFilter
 from apps.goals.filters import GoalDateFilter
 from apps.goals.models import Goal
 from apps.goals.models import GoalCategory
+from apps.goals.models import GoalComment
+from apps.goals.serializer import CommentCreateSerializer
+from apps.goals.serializer import CommentSerializer
 from apps.goals.serializer import GoalCategoryCreateSerializer
 from apps.goals.serializer import GoalCategorySerializer
 from apps.goals.serializer import GoalCreateSerializer
@@ -78,5 +81,34 @@ class GoalView(generics.RetrieveUpdateDestroyAPIView):
         ).exclude(status=Goal.Status.archived)
 
     def perform_destroy(self, instance: Goal):
-        instance.Status = Goal.Status.archived
+        instance.status = Goal.Status.archived
         instance.save(update_fields=('status',))
+
+
+class GoalCommentCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CommentCreateSerializer
+
+    def get_queryset(self):
+        return GoalComment.objects.select_related('user').filter(user=self.request.user)
+
+
+class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return GoalComment.objects.select_related('user').filter(user=self.request.user)
+
+
+class GoalCommentListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CommentSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = ('created', 'updated')
+
+    def get_queryset(self):
+        goal = self.request.query_params.get('goal')
+        if goal:
+            return GoalComment.objects.select_related('user').filter(user=self.request.user, goal=goal)
+        return GoalComment.objects.select_related('user').filter(user=self.request.user)
