@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from django.db import transaction
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.filters import OrderingFilter
@@ -104,11 +106,9 @@ class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
 class GoalCommentListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CommentSerializer
-    filter_backends = [OrderingFilter]
-    ordering_fields = ('created', 'updated')
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['goal']
+    ordering = ['-created', '-updated']
 
-    def get_queryset(self):
-        goal = self.request.query_params.get('goal')
-        if goal:
-            return GoalComment.objects.select_related('user').filter(user=self.request.user, goal=goal)
-        return GoalComment.objects.select_related('user').filter(user=self.request.user)
+    def get_queryset(self) -> QuerySet[GoalComment]:
+        return GoalComment.objects.select_related('user').filter(user_id=self.request.user.id)
