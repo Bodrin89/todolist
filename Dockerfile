@@ -14,4 +14,4 @@ ENTRYPOINT ["bash", "entrypoint.sh"]
 
 EXPOSE 8000
 
-CMD ["gunicorn", "todolist.wsgi", "-w", "4", "-b", "0.0.0.0:8000", "bin/bash"]
+CMD ["gunicorn", "todolist.wsgi", "-w", "4", "-b", "0.0.0.0:8000"]
