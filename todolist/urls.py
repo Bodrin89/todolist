@@ -23,9 +23,9 @@ from todolist import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('core/', include(('core.urls', 'core'))),
+    path('core/', include(('apps.core.urls', 'apps.core'))),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('goals/', include('goals.urls')),
+    path('goals/', include(('apps.goals.urls', 'apps.goals'))),
 ]
 
 if settings.DEBUG:
