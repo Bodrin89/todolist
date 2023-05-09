@@ -4,9 +4,18 @@ from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 
 from apps.core.serializer import ProfileSerializer
+from apps.goals.models import Board
 from apps.goals.models import Goal
 from apps.goals.models import GoalCategory
 from apps.goals.models import GoalComment
+
+
+class BoardCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        models = Board
+        fields = '__all__'
+        read_only_fields = ('id', 'created', 'updated', 'is_deleted')
 
 
 class GoalCategoryCreateSerializer(serializers.ModelSerializer):

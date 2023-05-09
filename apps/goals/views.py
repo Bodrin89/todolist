@@ -10,15 +10,26 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.filters import SearchFilter
 
 from apps.goals.filters import GoalDateFilter
+from apps.goals.models import BoardParticipant
 from apps.goals.models import Goal
 from apps.goals.models import GoalCategory
 from apps.goals.models import GoalComment
+from apps.goals.serializer import BoardCreateSerializer
 from apps.goals.serializer import CommentCreateSerializer
 from apps.goals.serializer import CommentSerializer
 from apps.goals.serializer import GoalCategoryCreateSerializer
 from apps.goals.serializer import GoalCategorySerializer
 from apps.goals.serializer import GoalCreateSerializer
 from apps.goals.serializer import GoalSerializer
+
+
+class BoardCreateView(generics.CreateAPIView):
+    serializer_class = BoardCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        """Делаем текущего пользователя владельцем доски"""
+        BoardParticipant.objects.create(user=self.request.user, board=serializer.save())
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
