@@ -21,6 +21,9 @@ class Board(BaseModel):
     title = models.CharField(verbose_name='Название', max_length=255)
     is_deleted = models.BooleanField(verbose_name='Удалена', default=False)
 
+    def __str__(self):
+        return self.title
+
 
 class BoardParticipant(Board):
     class Meta:
@@ -33,21 +36,12 @@ class BoardParticipant(Board):
         writer = 2, 'Редактор'
         reader = 3, 'Читатель'
 
-    board = models.ForeignKey(
-        Board,
-        verbose_name='Доска',
-        on_delete=models.PROTECT,
-        related_name='participants',
-    )
-    user = models.ForeignKey(
-        User,
-        verbose_name='Пользователь',
-        on_delete=models.PROTECT,
-        related_name='participants',
-    )
-    role = models.PositiveSmallIntegerField(
-        verbose_name='Роль', choices=Role.choices, default=Role.owner
-    )
+    board = models.ForeignKey(Board, verbose_name='Доска', on_delete=models.PROTECT, related_name='participants')
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.PROTECT, related_name='participants')
+    role = models.PositiveSmallIntegerField(verbose_name='Роль', choices=Role.choices, default=Role.owner)
+
+    def __str__(self):
+        return self.user
 
 
 class GoalCategory(BaseModel):

@@ -7,6 +7,8 @@ from apps.goals import views
 urlpatterns = [
     # Board
     path('board/create', views.BoardCreateView.as_view(), name='create_board'),
+    path('board/list', views.BoardListView.as_view(), name='board_list'),
+    path('board/<int:pk>', views.BoardView.as_view(), name='board'),
 
     # Goal Category API
     path('goal_category/create', views.GoalCategoryCreateView.as_view(), name='create_category'),
