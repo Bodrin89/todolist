@@ -60,5 +60,5 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
 volumes :
-  diploma_pg_data:
+  diploma_pg_15_data:
   django_static:
