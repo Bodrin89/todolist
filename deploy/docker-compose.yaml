@@ -1,8 +1,22 @@
 ---
 version : '3.8'
 services:
+#  db:
+#    image: postgres:11
+#    environment:
+#      POSTGRES_USER: ${POSTGRES_USER}
+#      POSTGRES_DB: ${POSTGRES_DB}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#    volumes:
+#      - diploma_pg_data:/var/lib/postgresql/data
+#    healthcheck:
+#      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+#      timeout: 3s
+#      retries: 10
+#      interval: 3s
+
   db:
-    image: postgres:11
+    image: postgres:15
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -14,13 +28,6 @@ services:
       timeout: 3s
       retries: 10
       interval: 3s
-
-  db_15:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   api:
     image: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
