@@ -15,6 +15,13 @@ services:
       retries: 10
       interval: 3s
 
+  db_15:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
   api:
     image: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
