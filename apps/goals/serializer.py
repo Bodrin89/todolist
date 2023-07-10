@@ -14,6 +14,7 @@ from apps.goals.models import GoalComment
 
 
 class BoardCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания новой доски"""
     class Meta:
         model = Board
         fields = '__all__'
@@ -32,6 +33,7 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
 
 
 class BoardSerializer(serializers.ModelSerializer):
+    """Сериализатор для редактирования и удаления доски"""
     participants = BoardParticipantSerializer(many=True, required=False)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
@@ -41,6 +43,7 @@ class BoardSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated', 'is_deleted')
 
     def update(self, instance: Board, validated_data: dict) -> Board:
+        """Добавление новых участников и изменение названия доски """
         participants_data = validated_data.pop('participants', None)
 
         owner_id = self.context['request'].user.id
@@ -73,15 +76,18 @@ class BoardSerializer(serializers.ModelSerializer):
 
 
 class BoardListSerializer(serializers.ModelSerializer):
+    """Сериализатор списка досок пользователя"""
     class Meta:
         model = Board
         fields = '__all__'
 
 
 class GoalCategoryCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания новой категории"""
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def validate_board(self, board: Board) -> Board:
+        """Валидация на создание категории только для не удаленных досок и на то что юзер автор или редактор доски"""
         if board.is_deleted:
             raise serializers.ValidationError('board is delete')
         if not BoardParticipant.objects.filter(
@@ -99,6 +105,7 @@ class GoalCategoryCreateSerializer(serializers.ModelSerializer):
 
 
 class GoalCategorySerializer(serializers.ModelSerializer):
+    """Сериализатор получения списка категорий"""
     user = ProfileSerializer(read_only=True)
 
     class Meta:
@@ -108,6 +115,7 @@ class GoalCategorySerializer(serializers.ModelSerializer):
 
 
 class GoalCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор создания цели у категории"""
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -116,6 +124,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated', 'user')
 
     def validate_category(self, category: GoalCategory) -> GoalCategory:
+        """Валидация на то что user является автором или редактором, и то что категория не удалена"""
         if category.is_deleted:
             raise serializers.ValidationError('not allowed in deleted category')
 

@@ -31,6 +31,7 @@ from apps.goals.serializer import GoalSerializer
 
 
 class BoardCreateView(generics.CreateAPIView):
+    """Создание новой доски"""
     serializer_class = BoardCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -40,6 +41,7 @@ class BoardCreateView(generics.CreateAPIView):
 
 
 class BoardListView(generics.ListAPIView):
+    """Получение списка досок пользователя"""
     serializer_class = BoardListSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [OrderingFilter]
@@ -50,6 +52,7 @@ class BoardListView(generics.ListAPIView):
 
 
 class BoardView(generics.RetrieveUpdateDestroyAPIView):
+    """Редактирование и удаление досок пользователя"""
     permission_classes = [permissions.IsAuthenticated, BoardPermission]
     serializer_class = BoardSerializer
 
@@ -57,6 +60,7 @@ class BoardView(generics.RetrieveUpdateDestroyAPIView):
         return Board.objects.prefetch_related('participants__user').filter(is_deleted=False)
 
     def perform_destroy(self, instance: Board):
+        """Удаление доски (перевод is_deleted в True)"""
         with transaction.atomic():
             instance.is_deleted = True
             instance.save()
@@ -68,11 +72,13 @@ class BoardView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
+    """Создание новой категории"""
     permission_classes = [GoalCategoryPermission]
     serializer_class = GoalCategoryCreateSerializer
 
 
 class GoalCategoryListView(generics.ListAPIView):
+    """Получение списка категорий где текущий user является участником"""
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategorySerializer
 
@@ -83,21 +89,25 @@ class GoalCategoryListView(generics.ListAPIView):
     search_fields = ['title']
 
     def get_queryset(self):
+        """Получение категорий в которых текущий пользователь является участником"""
         user = self.request.user
         return GoalCategory.objects.select_related('user').filter(board__participants__user_id=user.id,
                                                                   is_deleted=False)
 
 
 class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
+    """Редактирование и удаление категории"""
     permission_classes = [GoalCategoryPermission]
     serializer_class = GoalCategorySerializer
 
     def get_queryset(self):
+        """Получение категорий в которых текущий пользователь является автором или редактором"""
         user = self.request.user
         return GoalCategory.objects.select_related('user').filter(board__participants__user_id=user.id,
                                                                   is_deleted=False)
 
     def perform_destroy(self, instance: GoalCategory) -> None:
+        """Удаление категории (перевод is_deleted в True)"""
         with transaction.atomic():
             instance.is_deleted = True
             instance.save(update_fields=('is_deleted',))
@@ -105,11 +115,13 @@ class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GoalCreateView(generics.CreateAPIView):
+    """Создание цели у категории"""
     permission_classes = [GoalPermission]
     serializer_class = GoalCreateSerializer
 
 
 class GoalListView(generics.ListAPIView):
+    """Получение списка целей"""
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalSerializer
 
@@ -127,6 +139,7 @@ class GoalListView(generics.ListAPIView):
 
 
 class GoalView(generics.RetrieveUpdateDestroyAPIView):
+    """Редактирование и удаление целей"""
     permission_classes = [GoalPermission]
     serializer_class = GoalSerializer
 
@@ -142,6 +155,7 @@ class GoalView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GoalCommentCreateView(generics.CreateAPIView):
+    """Создание комментария у цели"""
     permission_classes = [CommentCreatePermission]  # TODO: Не срабатывает (комментарии создаются всегда)
     serializer_class = CommentCreateSerializer
 
@@ -150,6 +164,7 @@ class GoalCommentCreateView(generics.CreateAPIView):
 
 
 class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
+    """Редактирование и удаление комментария"""
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CommentSerializer
 

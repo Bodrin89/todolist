@@ -11,6 +11,7 @@ from apps.core.models import User
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
+    """Сериализатор для регистрации нового пользователя"""
     password = serializers.CharField(validators=[validate_password],
                                      write_only=True, style={'input_type': 'password'})
     password_repeat = serializers.CharField(write_only=True,
@@ -21,6 +22,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_repeat')
 
     def validate(self, attrs):
+        """Проверка введенного повторно пароля на валидность"""
         if not attrs.get('password_repeat', None):
             raise ValidationError('Required field')
         if attrs['password'] != attrs['password_repeat']:
@@ -28,6 +30,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        """Создание нового пользователя и сохранение его в БД с за хэшированным паролем"""
         del validated_data['password_repeat']
         validated_data['password'] = make_password(validated_data['password'])
         user = User.objects.create(**validated_data)
@@ -35,6 +38,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
+    """Сериализатор для входа по username и password"""
     password = serializers.CharField(validators=[validate_password],
                                      write_only=True, style={'input_type': 'password'})
     username = serializers.CharField(required=True)
@@ -45,6 +49,7 @@ class LoginSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'first_name', 'last_name', 'email')
 
     def create(self, validated_data: dict) -> User:
+        """Аутентификация пользователя"""
         if not (user := authenticate(
                 username=validated_data.get('username', None),
                 password=validated_data.get('password', None)
@@ -54,6 +59,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    """Сериализатор для редактирования данных пользователя"""
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
@@ -61,17 +67,20 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UpdatePasswordSerializer(serializers.ModelSerializer):
+    """Сериализатор для обновления пароля"""
     old_password = serializers.CharField(validators=[validate_password], required=True,
                                          write_only=True, style={'input_type': 'password'})
     new_password = serializers.CharField(validators=[validate_password], required=True,
                                          write_only=True, style={'input_type': 'password'})
 
     def validate_old_password(self, old_password):
+        """Проверка на валидность введенного старого пароля"""
         if not self.instance.check_password(old_password):
             raise ValidationError('Incorrect password')
         return old_password
 
     def update(self, instance, validated_data):
+        """Обновление пароля"""
         instance.set_password(validated_data['new_password'])
         instance.save(update_fields=('password',))
         return instance
