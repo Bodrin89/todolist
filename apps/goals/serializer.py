@@ -6,11 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from apps.core.models import User
 from apps.core.serializer import ProfileSerializer
-from apps.goals.models import Board
-from apps.goals.models import BoardParticipant
-from apps.goals.models import Goal
-from apps.goals.models import GoalCategory
-from apps.goals.models import GoalComment
+from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory, GoalComment
 
 
 class BoardCreateSerializer(serializers.ModelSerializer):
@@ -23,11 +19,12 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 class BoardParticipantSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role.choices[1:])
     user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
-    title = serializers.CharField(max_length=50, allow_null=True, allow_blank=True, required=False)
+    # title = serializers.CharField(max_length=50, allow_null=True, allow_blank=True, required=False)
 
     class Meta:
         model = BoardParticipant
-        fields = '__all__'
+        fields = ('id', 'user', 'board', 'role')
+        # exclude = ('created', 'updated', 'title', 'is_deleted')
         read_only_fields = ('id', 'created', 'updated', 'board')
 
 
@@ -42,27 +39,32 @@ class BoardSerializer(serializers.ModelSerializer):
 
     def update(self, instance: Board, validated_data: dict) -> Board:
         participants_data = validated_data.pop('participants', None)
-
         owner_id = self.context['request'].user.id
-        new_participants = {part['user'].id: part for part in participants_data}
+        if participants_data:
+            new_participants = {part['user'].id: part for part in participants_data}
+            with transaction.atomic():
+                for old_participant in instance.participants.exclude(user=owner_id):
+                    if old_participant.user_id not in new_participants:
+                        old_participant.delete()
+                    else:
+                        new_part = new_participants[old_participant.user_id]
+                        if old_participant.role != new_part['role']:
+                            old_participant.role = new_part['role']
+                            old_participant.save()
+                        new_participants.pop(old_participant.user_id)
 
-        with transaction.atomic():
-            for old_participant in instance.participants.exclude(user=owner_id):
-                if old_participant.user_id not in new_participants:
-                    old_participant.delete()
-                else:
-                    new_part = new_participants[old_participant.user_id]
-                    if old_participant.role != new_part['role']:
-                        old_participant.role = new_part['role']
-                        old_participant.save()
-                    new_participants.pop(old_participant.user_id)
+                for new_part in new_participants.values():
+                    BoardParticipant.objects.create(
+                        board=instance,
+                        user=new_part['user'],
+                        role=new_part['role']
+                    )
 
-            for new_part in new_participants.values():
-                BoardParticipant.objects.create(
-                    board=instance,
-                    user=new_part['user'],
-                    role=new_part['role']
-                )
+        else:
+            BoardParticipant.objects.filter(board=instance).delete()
+            BoardParticipant.objects.update_or_create(board=instance,
+                                                      user=self.context['request'].user,
+                                                      role=1)
 
         if title := validated_data.get('title'):
             instance.title = title

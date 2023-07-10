@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import environ
@@ -51,9 +52,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    # apps
     'apps.goals',
     'apps.core',
+    'apps.bot',
+    # some
     'social_django',
+    'drf_spectacular',
+
 ]
 if DEBUG:
     INSTALLED_APPS += [
@@ -92,7 +98,6 @@ WSGI_APPLICATION = 'todolist.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 
 DATABASES = {
     'default': {
@@ -165,5 +170,49 @@ SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_USER_MODEL = 'core.User'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Todolist',
+    'DESCRIPTION': 'Планировщик задач'
+}
+
+# Определение пути к файлу лога
+current_date = datetime.now().strftime('%Y-%m-%d-%H-%M')
+filename = f'log_{current_date}.log'
+
+# Конфигурация логирования
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'main_format': {
+            'format': '{asctime} - {levelname} - {module} - {filename} - {message}',
+            'style': '{'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_format',
+            'level': 'WARNING'
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'main_format',
+            # "filename": filename,
+            'filename': 'log.log',
+            'maxBytes': 1000 * 1024 * 10,  # 10 Mb
+            'backupCount': 5  # Keep up to 5 backup files
+        }
+    },
+    'loggers': {
+        'main': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True
+        }
+    }
 }

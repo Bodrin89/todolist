@@ -3,8 +3,7 @@ from __future__ import annotations
 
 import django.db.models.deletion
 from django.conf import settings
-from django.db import migrations
-from django.db import models
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):

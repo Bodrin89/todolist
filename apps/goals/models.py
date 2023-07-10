@@ -40,8 +40,10 @@ class BoardParticipant(Board):
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.PROTECT, related_name='participants')
     role = models.PositiveSmallIntegerField(verbose_name='Роль', choices=Role.choices, default=Role.owner)
 
-    def __str__(self):
-        return self.user
+    def __repr__(self):
+        return f'BoardParticipant(id={self.id}, user={self.user}, board={self.board}, role={self.role})'
+    # def __str__(self):
+    #     return self.user
 
 
 class GoalCategory(BaseModel):
