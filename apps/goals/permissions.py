@@ -2,15 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.request import Request
 
-from apps.goals.models import Board
-from apps.goals.models import BoardParticipant
-from apps.goals.models import Goal
-from apps.goals.models import GoalCategory
-from apps.goals.models import GoalComment
+from apps.goals.models import (Board, BoardParticipant, Goal, GoalCategory,
+                               GoalComment)
 
 
 class BoardPermission(IsAuthenticated):

@@ -3,31 +3,20 @@ from __future__ import annotations
 from django.db import transaction
 from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from rest_framework import generics
-from rest_framework import permissions
-from rest_framework.filters import OrderingFilter
-from rest_framework.filters import SearchFilter
+from rest_framework import filters, generics, permissions
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.goals.filters import GoalDateFilter
-from apps.goals.models import Board
-from apps.goals.models import BoardParticipant
-from apps.goals.models import Goal
-from apps.goals.models import GoalCategory
-from apps.goals.models import GoalComment
-from apps.goals.permissions import BoardPermission
-from apps.goals.permissions import CommentCreatePermission
-from apps.goals.permissions import GoalCategoryPermission
-from apps.goals.permissions import GoalPermission
-from apps.goals.serializer import BoardCreateSerializer
-from apps.goals.serializer import BoardListSerializer
-from apps.goals.serializer import BoardSerializer
-from apps.goals.serializer import CommentCreateSerializer
-from apps.goals.serializer import CommentSerializer
-from apps.goals.serializer import GoalCategoryCreateSerializer
-from apps.goals.serializer import GoalCategorySerializer
-from apps.goals.serializer import GoalCreateSerializer
-from apps.goals.serializer import GoalSerializer
+from apps.goals.models import (Board, BoardParticipant, Goal, GoalCategory,
+                               GoalComment)
+from apps.goals.permissions import (BoardPermission, CommentCreatePermission,
+                                    GoalCategoryPermission, GoalPermission)
+from apps.goals.serializer import (BoardCreateSerializer, BoardListSerializer,
+                                   BoardSerializer, CommentCreateSerializer,
+                                   CommentSerializer,
+                                   GoalCategoryCreateSerializer,
+                                   GoalCategorySerializer,
+                                   GoalCreateSerializer, GoalSerializer)
 
 
 class BoardCreateView(generics.CreateAPIView):

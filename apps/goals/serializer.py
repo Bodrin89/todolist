@@ -6,11 +6,8 @@ from rest_framework.exceptions import PermissionDenied
 
 from apps.core.models import User
 from apps.core.serializer import ProfileSerializer
-from apps.goals.models import Board
-from apps.goals.models import BoardParticipant
-from apps.goals.models import Goal
-from apps.goals.models import GoalCategory
-from apps.goals.models import GoalComment
+from apps.goals.models import (Board, BoardParticipant, Goal, GoalCategory,
+                               GoalComment)
 
 
 class BoardCreateSerializer(serializers.ModelSerializer):

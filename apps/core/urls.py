@@ -2,10 +2,7 @@ from __future__ import annotations
 
 from django.urls import path
 
-from apps.core.views import LoginView
-from apps.core.views import ProfileView
-from apps.core.views import SingUpView
-from apps.core.views import UpdatePassword
+from apps.core.views import LoginView, ProfileView, SingUpView, UpdatePassword
 
 urlpatterns = [
     path('signup', SingUpView.as_view(), name='signup'),

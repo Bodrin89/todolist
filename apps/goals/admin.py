@@ -2,10 +2,7 @@ from __future__ import annotations
 
 from django.contrib import admin
 
-from apps.goals.models import Board
-from apps.goals.models import Goal
-from apps.goals.models import GoalCategory
-from apps.goals.models import GoalComment
+from apps.goals.models import Board, Goal, GoalCategory, GoalComment
 
 
 @admin.register(GoalCategory)

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from django.db import migrations
-from django.db import transaction
+from django.db import migrations, transaction
 from django.utils import timezone
 
 

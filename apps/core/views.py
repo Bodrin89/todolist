@@ -1,17 +1,14 @@
 from __future__ import annotations
 
-from django.contrib.auth import login
-from django.contrib.auth import logout
-from rest_framework.generics import CreateAPIView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
-from rest_framework.generics import UpdateAPIView
+from django.contrib.auth import login, logout
+from rest_framework.generics import (CreateAPIView,
+                                     RetrieveUpdateDestroyAPIView,
+                                     UpdateAPIView)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.serializer import CreateUserSerializer
-from apps.core.serializer import LoginSerializer
-from apps.core.serializer import ProfileSerializer
-from apps.core.serializer import UpdatePasswordSerializer
+from apps.core.serializer import (CreateUserSerializer, LoginSerializer,
+                                  ProfileSerializer, UpdatePasswordSerializer)
 
 
 class SingUpView(CreateAPIView):

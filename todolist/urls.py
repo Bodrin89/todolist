@@ -16,8 +16,7 @@ Including another URLconf
 from __future__ import annotations
 
 from django.contrib import admin
-from django.urls import include
-from django.urls import path
+from django.urls import include, path
 
 from todolist import settings
 
