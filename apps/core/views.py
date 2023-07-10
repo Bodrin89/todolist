@@ -8,7 +8,6 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.models import User
 from apps.core.serializer import CreateUserSerializer
 from apps.core.serializer import LoginSerializer
 from apps.core.serializer import ProfileSerializer
@@ -16,10 +15,12 @@ from apps.core.serializer import UpdatePasswordSerializer
 
 
 class SingUpView(CreateAPIView):
+    """Регистрация нового пользователя"""
     serializer_class = CreateUserSerializer
 
 
 class LoginView(CreateAPIView):
+    """Вход по имени и паролю"""
     serializer_class = LoginSerializer
 
     def create(self, request, *args, **kwargs):
@@ -30,7 +31,7 @@ class LoginView(CreateAPIView):
 
 
 class ProfileView(RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
+    """Редактирование данных пользователя"""
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
 
@@ -38,11 +39,12 @@ class ProfileView(RetrieveUpdateDestroyAPIView):
         return self.request.user
 
     def perform_destroy(self, instance):
+        """Logout текущего пользователя"""
         logout(self.request)
 
 
 class UpdatePassword(UpdateAPIView):
-    queryset = User.objects.all()
+    """Обновление пароля"""
     serializer_class = UpdatePasswordSerializer
     permission_classes = [IsAuthenticated]
 
