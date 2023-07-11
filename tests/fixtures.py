@@ -3,8 +3,6 @@ import logging
 import pytest
 from rest_framework.test import APIClient
 
-from tests.factories import BoardFactory
-
 logger = logging.getLogger('main')
 
 

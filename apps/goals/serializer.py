@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
@@ -8,6 +10,7 @@ from apps.core.models import User
 from apps.core.serializer import ProfileSerializer
 from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory, GoalComment
 
+logger = logging.getLogger('main')
 
 class BoardCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания новой доски"""
@@ -20,12 +23,10 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 class BoardParticipantSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role.choices[1:])
     user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
-    # title = serializers.CharField(max_length=50, allow_null=True, allow_blank=True, required=False)
 
     class Meta:
         model = BoardParticipant
         fields = ('id', 'user', 'board', 'role')
-        # exclude = ('created', 'updated', 'title', 'is_deleted')
         read_only_fields = ('id', 'created', 'updated', 'board')
 
 

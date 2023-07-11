@@ -6,7 +6,7 @@ from freezegun import freeze_time
 from pytest_factoryboy import register
 
 from apps.core.models import User
-from apps.goals.models import Board, BoardParticipant
+from apps.goals.models import Board, BoardParticipant, GoalCategory
 
 logger = logging.getLogger('main')
 
@@ -55,3 +55,14 @@ class BoardParticipantFactory(DataBaseFactory):
     role = factory.Iterator([1, 2, 3])
     created = DataBaseFactory.created
     updated = DataBaseFactory.updated
+
+
+@register
+class GoalCategoryFactory(DataBaseFactory):
+    class Meta:
+        model = GoalCategory
+
+    board = factory.SubFactory(BoardFactory)
+    title = factory.Faker('name')
+    user = factory.SubFactory(UserFactory)
+    is_deleted = False
