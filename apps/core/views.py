@@ -10,10 +10,12 @@ from apps.core.serializer import CreateUserSerializer, LoginSerializer, ProfileS
 
 
 class SingUpView(CreateAPIView):
+    """Регистрация нового пользователя"""
     serializer_class = CreateUserSerializer
 
 
 class LoginView(CreateAPIView):
+    """Вход по имени и паролю"""
     serializer_class = LoginSerializer
 
     def create(self, request, *args, **kwargs):
@@ -24,6 +26,7 @@ class LoginView(CreateAPIView):
 
 
 class ProfileView(RetrieveUpdateDestroyAPIView):
+    """Редактирование данных пользователя"""
     queryset = User.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -32,10 +35,12 @@ class ProfileView(RetrieveUpdateDestroyAPIView):
         return self.request.user
 
     def perform_destroy(self, instance):
+        """Logout текущего пользователя"""
         logout(self.request)
 
 
 class UpdatePassword(UpdateAPIView):
+    """Обновление пароля"""
     queryset = User.objects.all()
     serializer_class = UpdatePasswordSerializer
     permission_classes = [IsAuthenticated]

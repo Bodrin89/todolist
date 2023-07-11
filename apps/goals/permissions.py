@@ -20,6 +20,7 @@ class BoardPermission(IsAuthenticated):
 class GoalCategoryPermission(IsAuthenticated):
 
     def has_object_permission(self, request: Request, view, goal_category: GoalCategory) -> bool:
+        """Permission автор или редактор доски"""
         _filters: dict[str: Any] = {'user_id': request.user.id, 'board_id': goal_category.board_id}
         if request.method not in SAFE_METHODS:
             return BoardParticipant.objects.filter(**_filters, role__in=(BoardParticipant.Role.owner,
@@ -30,6 +31,7 @@ class GoalCategoryPermission(IsAuthenticated):
 class GoalPermission(IsAuthenticated):
 
     def has_object_permission(self, request: Request, view, goal: Goal) -> bool:
+        """Permission автор или редактор доски"""
         _filters: dict[str: Any] = {'user_id': request.user.id, 'board_id': goal.category.board.id}
         if request.method not in SAFE_METHODS:
             return BoardParticipant.objects.filter(**_filters, role__in=(BoardParticipant.Role.owner,
