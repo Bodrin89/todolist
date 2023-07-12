@@ -59,8 +59,8 @@ jobs:
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
             cd diploma_work
-            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose pull
-            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker-compose up -d
+            docker-compose pull
+            docker-compose up -d
       - name: Cleanup
         if: always()
         uses: appleboy/ssh-action@master
@@ -69,4 +69,4 @@ jobs:
           username: ${{ secrets.SERV_USERNAME }}
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
-            echo ${{ secrets.SERV_PASSWORD }} | sudo -S docker system prune -a -f
+            docker system prune -a -f
