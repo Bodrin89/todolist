@@ -93,5 +93,4 @@ class TestGoalCategory:
             assert response.status_code == 204
             assert deleted_category.is_deleted
         else:
-            logger.debug(role)
             assert response.status_code == 403
