@@ -4,7 +4,7 @@ import logging
 
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from apps.core.models import User
 from apps.core.serializer import ProfileSerializer
@@ -12,8 +12,10 @@ from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory, GoalC
 
 logger = logging.getLogger('main')
 
+
 class BoardCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания новой доски"""
+
     class Meta:
         model = Board
         fields = '__all__'
@@ -80,6 +82,7 @@ class BoardSerializer(serializers.ModelSerializer):
 
 class BoardListSerializer(serializers.ModelSerializer):
     """Сериализатор списка досок пользователя"""
+
     class Meta:
         model = Board
         fields = '__all__'
@@ -144,6 +147,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
 
 
 class GoalSerializer(serializers.ModelSerializer):
+    """Сериализатор для редактирования и удаления целей"""
     user = ProfileSerializer(read_only=True)
 
     class Meta:
@@ -162,6 +166,7 @@ class GoalSerializer(serializers.ModelSerializer):
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания комментариев"""
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -169,10 +174,17 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         fields = ('text', 'goal', 'user')
         read_only_fields = ('id', 'created', 'updated', 'user')
 
-    def validate_comment(self, value: GoalComment):
-        if value.user != self.context['request'].user:
+    def validate_goal(self, value: Goal) -> Goal:
+        if value.status == Goal.Status.archived:
+            raise ValidationError('Goal not found')
+        if not BoardParticipant.objects.filter(
+                board_id=value.category.board_id,
+                role__in=[
+                    BoardParticipant.Role.owner, BoardParticipant.Role.writer
+                ],
+                user=self.context['request'].user,
+        ).exists():
             raise PermissionDenied
-
         return value
 
 
@@ -184,7 +196,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'created', 'updated', 'user')
 
-    def validate_comment(self, value: GoalComment):
+    def validate_comment(self, value: GoalComment) -> GoalComment:
         if value.user != self.context['request'].user:
             raise PermissionDenied
         return value

@@ -37,13 +37,3 @@ class GoalPermission(IsAuthenticated):
             return BoardParticipant.objects.filter(**_filters, role__in=(BoardParticipant.Role.owner,
                                                                          BoardParticipant.Role.writer)).exists()
         return True
-
-
-class CommentCreatePermission(IsAuthenticated):
-
-    def has_object_permission(self, request: Request, view, comment: GoalComment) -> bool:
-        _filters: dict[str: Any] = {'user_id': request.user.id, 'board_id': comment.goal.category.board.id}
-        if request.method not in SAFE_METHODS:
-            return BoardParticipant.objects.filter(**_filters, role__in=(BoardParticipant.Role.owner,
-                                                                         BoardParticipant.Role.writer)).exists()
-        return True

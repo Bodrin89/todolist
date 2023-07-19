@@ -8,7 +8,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 
 from apps.goals.filters import GoalDateFilter
 from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory, GoalComment
-from apps.goals.permissions import BoardPermission, CommentCreatePermission, GoalCategoryPermission, GoalPermission
+from apps.goals.permissions import BoardPermission, GoalCategoryPermission, GoalPermission
 from apps.goals.serializer import (BoardCreateSerializer,
                                    BoardListSerializer,
                                    BoardSerializer,
@@ -146,7 +146,6 @@ class GoalView(generics.RetrieveUpdateDestroyAPIView):
 
 class GoalCommentCreateView(generics.CreateAPIView):
     """Создание комментария у цели"""
-    permission_classes = [CommentCreatePermission]  # TODO: Не срабатывает (комментарии создаются всегда)
     serializer_class = CommentCreateSerializer
 
     def get_queryset(self):
