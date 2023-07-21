@@ -29,7 +29,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        """Создание нового пользователя и сохранение его в БД с за хэшированным паролем"""
+        """Создание нового пользователя и сохранение его в БД с захэшированным паролем"""
         del validated_data['password_repeat']
         validated_data['password'] = make_password(validated_data['password'])
         user = User.objects.create(**validated_data)

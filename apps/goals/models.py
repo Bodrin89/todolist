@@ -41,7 +41,7 @@ class BoardParticipant(Board):
     role = models.PositiveSmallIntegerField(verbose_name='Роль', choices=Role.choices, default=Role.owner)
 
     def __str__(self):
-        return self.user
+        return f'{self.user}'
 
 
 class GoalCategory(BaseModel):

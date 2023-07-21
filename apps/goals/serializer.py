@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import logging
+
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from apps.core.models import User
 from apps.core.serializer import ProfileSerializer
-from apps.goals.models import (Board, BoardParticipant, Goal, GoalCategory,
-                               GoalComment)
+from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory, GoalComment
+
+logger = logging.getLogger('main')
 
 
 class BoardCreateSerializer(serializers.ModelSerializer):
@@ -21,11 +24,10 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 class BoardParticipantSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role.choices[1:])
     user = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
-    title = serializers.CharField(max_length=50, allow_null=True, allow_blank=True, required=False)
 
     class Meta:
         model = BoardParticipant
-        fields = '__all__'
+        fields = ('id', 'user', 'board', 'role')
         read_only_fields = ('id', 'created', 'updated', 'board')
 
 
@@ -42,27 +44,32 @@ class BoardSerializer(serializers.ModelSerializer):
     def update(self, instance: Board, validated_data: dict) -> Board:
         """Добавление новых участников и изменение названия доски """
         participants_data = validated_data.pop('participants', None)
-
         owner_id = self.context['request'].user.id
-        new_participants = {part['user'].id: part for part in participants_data}
+        if participants_data:
+            new_participants = {part['user'].id: part for part in participants_data}
+            with transaction.atomic():
+                for old_participant in instance.participants.exclude(user=owner_id):
+                    if old_participant.user_id not in new_participants:
+                        old_participant.delete()
+                    else:
+                        new_part = new_participants[old_participant.user_id]
+                        if old_participant.role != new_part['role']:
+                            old_participant.role = new_part['role']
+                            old_participant.save()
+                        new_participants.pop(old_participant.user_id)
 
-        with transaction.atomic():
-            for old_participant in instance.participants.exclude(user=owner_id):
-                if old_participant.user_id not in new_participants:
-                    old_participant.delete()
-                else:
-                    new_part = new_participants[old_participant.user_id]
-                    if old_participant.role != new_part['role']:
-                        old_participant.role = new_part['role']
-                        old_participant.save()
-                    new_participants.pop(old_participant.user_id)
+                for new_part in new_participants.values():
+                    BoardParticipant.objects.create(
+                        board=instance,
+                        user=new_part['user'],
+                        role=new_part['role']
+                    )
 
-            for new_part in new_participants.values():
-                BoardParticipant.objects.create(
-                    board=instance,
-                    user=new_part['user'],
-                    role=new_part['role']
-                )
+        else:
+            BoardParticipant.objects.filter(board=instance).delete()
+            BoardParticipant.objects.update_or_create(board=instance,
+                                                      user=self.context['request'].user,
+                                                      role=1)
 
         if title := validated_data.get('title'):
             instance.title = title
@@ -136,6 +143,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
 
 
 class GoalSerializer(serializers.ModelSerializer):
+    """Сериализатор для редактирования и удаления целей"""
     user = ProfileSerializer(read_only=True)
 
     class Meta:
@@ -154,6 +162,7 @@ class GoalSerializer(serializers.ModelSerializer):
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания комментариев"""
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -161,10 +170,17 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         fields = ('text', 'goal', 'user')
         read_only_fields = ('id', 'created', 'updated', 'user')
 
-    def validate_comment(self, value: GoalComment):
-        if value.user != self.context['request'].user:
+    def validate_goal(self, value: Goal) -> Goal:
+        if value.status == Goal.Status.archived:
+            raise ValidationError('Goal not found')
+        if not BoardParticipant.objects.filter(
+                board_id=value.category.board_id,
+                role__in=[
+                    BoardParticipant.Role.owner, BoardParticipant.Role.writer
+                ],
+                user=self.context['request'].user,
+        ).exists():
             raise PermissionDenied
-
         return value
 
 
@@ -174,9 +190,9 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalComment
         fields = '__all__'
-        read_only_fields = ('id', 'created', 'updated', 'user')
+        read_only_fields = ('id', 'created', 'updated', 'goal', 'user')
 
-    def validate_comment(self, value: GoalComment):
+    def validate_comment(self, value: GoalComment) -> GoalComment:
         if value.user != self.context['request'].user:
             raise PermissionDenied
         return value

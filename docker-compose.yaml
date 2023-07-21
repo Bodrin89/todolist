@@ -18,6 +18,7 @@ services:
       retries: 10
       interval: 3s
 
+
   api:
     build: .
     env_file:
@@ -33,6 +34,22 @@ services:
     volumes:
       - ./todolist:/code/todolist/
       - ./apps:/code/apps/
+
+  bot:
+    build: .
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+      api:
+        condition: service_started
+    volumes:
+      - ./apps/bot:/cod/apps/bot
+    command: python3 manage.py runbot
+
 
   collect_static:
     build: .

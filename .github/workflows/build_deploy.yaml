@@ -70,4 +70,3 @@ jobs:
           password: ${{ secrets.SERV_PASSWORD }}
           script: |
             docker system prune -a -f
-

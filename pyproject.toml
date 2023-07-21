@@ -15,6 +15,8 @@ pre-commit = "^3.2.1"
 djangorestframework = "^3.14.0"
 social-auth-app-django = "^5.2.0"
 django-filter = "^23.2"
+pydantic = "^1.10.8"
+update = "^0.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -23,7 +25,24 @@ flake8-bugbear = "^23.3.12"
 ansible-vault-win = "^1.0.0"
 pip = "^23.0.1"
 django-extensions = "^3.2.1"
+pytest-django = "^4.5.2"
+drf-spectacular = "^0.26.3"
+pytest-factoryboy = "^2.5.1"
+pytest-cov = "^4.1.0"
+freezegun = "^1.2.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+multi_line_output = 1
+include_trailing_comma = true
+line_length = 120
+combine_as_imports = true
+combine_star = true
+skip_glob = [
+    '**/migrations/**',
+    '.git',
+    '.venv'
+]
