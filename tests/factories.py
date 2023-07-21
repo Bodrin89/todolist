@@ -3,10 +3,9 @@ import logging
 
 import factory.django
 from freezegun import freeze_time
-from pytest_factoryboy import register
 
 from apps.core.models import User
-from apps.goals.models import Board, BoardParticipant, GoalCategory
+from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory, GoalComment
 
 logger = logging.getLogger('main')
 
@@ -27,7 +26,6 @@ class DataBaseFactory(factory.django.DjangoModelFactory):
     updated = get_update()
 
 
-@register
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
@@ -36,20 +34,20 @@ class UserFactory(factory.django.DjangoModelFactory):
     password = factory.Faker('password')
 
 
-@register
 class BoardFactory(DataBaseFactory):
     class Meta:
         model = Board
+
     title = factory.Faker('name')
     is_deleted = False
     created = DataBaseFactory.created
     updated = DataBaseFactory.updated
 
 
-@register
 class BoardParticipantFactory(DataBaseFactory):
     class Meta:
         model = BoardParticipant
+
     board = factory.SubFactory(BoardFactory)
     user = factory.SubFactory(UserFactory)
     role = factory.Iterator([1, 2, 3])
@@ -57,7 +55,6 @@ class BoardParticipantFactory(DataBaseFactory):
     updated = DataBaseFactory.updated
 
 
-@register
 class GoalCategoryFactory(DataBaseFactory):
     class Meta:
         model = GoalCategory
@@ -66,3 +63,25 @@ class GoalCategoryFactory(DataBaseFactory):
     title = factory.Faker('name')
     user = factory.SubFactory(UserFactory)
     is_deleted = False
+
+
+class GoalFactory(DataBaseFactory):
+    class Meta:
+        model = Goal
+
+    title = factory.Faker('name')
+    description = factory.Faker('text')
+    category = factory.SubFactory(GoalCategoryFactory)
+    due_date = None
+    user = factory.SubFactory(UserFactory)
+    status = factory.Iterator([1, 2, 3, 4])
+    priority = factory.Iterator([1, 2, 3, 4])
+
+
+class GoalCommentFactory(DataBaseFactory):
+    class Meta:
+        model = GoalComment
+
+    text = factory.Faker('text')
+    goal = factory.SubFactory(GoalFactory)
+    user = factory.SubFactory(UserFactory)

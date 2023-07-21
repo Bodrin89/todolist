@@ -146,6 +146,7 @@ class GoalView(generics.RetrieveUpdateDestroyAPIView):
 
 class GoalCommentCreateView(generics.CreateAPIView):
     """Создание комментария у цели"""
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = CommentCreateSerializer
 
     def get_queryset(self):
