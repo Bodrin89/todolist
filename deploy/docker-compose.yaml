@@ -23,20 +23,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
-  bot:
-    build: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-    env_file:
-      - .env
-    environment:
-      POSTGRES_HOST: db
-    depends_on:
-      db:
-        condition: service_healthy
-      api:
-        condition: service_started
+#  bot:
+#    build: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+#    env_file:
+#      - .env
+#    environment:
+#      POSTGRES_HOST: db
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#      api:
+#        condition: service_started
 #    volumes:
 #      - ./apps/bot:/cod/apps/bot
-    command: python3 manage.py runbot
+#    command: python3 manage.py runbot
 
   collect_static:
     image: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
