@@ -24,7 +24,7 @@ services:
       db:
         condition: service_healthy
   bot:
-    build: .
+    image: vladimirbodrin/diplom_work:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     environment:
@@ -34,8 +34,6 @@ services:
         condition: service_healthy
       api:
         condition: service_started
-    volumes:
-      - ./apps/bot:/cod/apps/bot
     command: python3 manage.py runbot
 
   collect_static:
