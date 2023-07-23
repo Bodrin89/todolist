@@ -7,6 +7,8 @@ from apps.goals.models import Goal, GoalCategory
 from todolist.settings import env
 
 URL_VERIFY_COD = env('URL_VERIFY_COD')
+URL_SIGNUP = env('URL_SIGNUP')
+URL_LOGIN = env('URL_LOGIN')
 
 
 class BaseTgUserState:
@@ -34,17 +36,25 @@ class BaseTgUserState:
 class NewUserState(BaseTgUserState):
     def __init__(self, tg_user: TgUser, tg_client: TgClient):
         super().__init__(tg_user, tg_client)
-        self._text = f'Добро пожаловать в TaskTG бот\nПодтвердите, пожалуйста, свой аккаунт. ' \
+        self._text = f'Добро пожаловать в TaskTG бот\nЕсли вы не зарегистрированы, пройдите регистрацию' \
+                     f' <a href="{URL_SIGNUP}">по ссылке</a>\nИли войдите в аккаунт' \
+                     f' <a href="{URL_LOGIN}">по ссылке</a>' \
+                     f' \nПодтвердите, пожалуйста, ' \
+                     f'свой аккаунт. ' \
                      f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}\n' \
-                     f"<a href='{URL_VERIFY_COD}'>на сайте</a>"
+                     f'<a href="{URL_VERIFY_COD}">на сайте</a>'
 
 
 class UnverifiedUserState(BaseTgUserState):
     def __init__(self, tg_user: TgUser, tg_client: TgClient):
         super().__init__(tg_user, tg_client)
-        self._text = f'Подтвердите, пожалуйста, свой аккаунт. ' \
+        self._text = 'Если вы не зарегистрированы, пройдите регистрацию' \
+                     f' <a href="{URL_SIGNUP}">по ссылке</a>\nИли войдите в аккаунт' \
+                     f' <a href="{URL_LOGIN}">по ссылке</a>' \
+                     f' \nПодтвердите, пожалуйста, ' \
+                     f'свой аккаунт. ' \
                      f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}\n' \
-                     f"<a href='{URL_VERIFY_COD}'>на сайте</a>"
+                     f'<a href="{URL_VERIFY_COD}">на сайте</a>'
 
 
 class VerifiedUserState(BaseTgUserState):
