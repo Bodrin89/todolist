@@ -6,7 +6,6 @@ from apps.bot.tg.dc import Message
 from apps.goals.models import Goal, GoalCategory
 from todolist.settings import env
 
-URL_VERIFY_COD = env('URL_VERIFY_COD')
 URL_SIGNUP = env('URL_SIGNUP')
 URL_LOGIN = env('URL_LOGIN')
 
