@@ -12,7 +12,7 @@ urlpatterns = [
     path('core/', include(('apps.core.urls', 'apps.core'))),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('goals/', include(('apps.goals.urls', 'apps.goals'))),
-    path('api/bot/', include(('apps.bot.urls', 'apps.bot'))),
+    path('bot/', include(('apps.bot.urls', 'apps.bot'))),
 
     path('docs/schema', SpectacularAPIView.as_view(), name='schema'),
     path('docs/swagger', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger')

@@ -39,9 +39,8 @@ class NewUserState(BaseTgUserState):
         self._text = f'Добро пожаловать в TaskTG бот\n\nЕсли вы не зарегистрированы, пройдите регистрацию ' \
                      f'<a href="{URL_SIGNUP}">по ссылке</a>' \
                      f'\nили войдите в аккаунт <a href="{URL_LOGIN}">по ссылке</a>' \
-                     f' \nЕсли вы зарегистрированы подтвердите, пожалуйста, свой аккаунт. ' \
-                     f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}\n' \
-                     f'<a href="{URL_VERIFY_COD}">на сайте</a>'
+                     f' \n и подтвердите, его. ' \
+                     f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}'
 
 
 class UnverifiedUserState(BaseTgUserState):
@@ -50,9 +49,8 @@ class UnverifiedUserState(BaseTgUserState):
         self._text = 'Если вы не зарегистрированы, пройдите регистрацию ' \
                      f'<a href="{URL_SIGNUP}">по ссылке</a>' \
                      f'\nили войдите в аккаунт <a href="{URL_LOGIN}">по ссылке</a>' \
-                     f' \nЕсли вы зарегистрированы подтвердите, пожалуйста, свой аккаунт. ' \
-                     f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}\n' \
-                     f'<a href="{URL_VERIFY_COD}">на сайте</a>'
+                     f' \n и подтвердите, его. ' \
+                     f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}'
 
 
 class VerifiedUserState(BaseTgUserState):
