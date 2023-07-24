@@ -33,6 +33,7 @@ class BaseTgUserState:
 
 
 class NewUserState(BaseTgUserState):
+    """Класс юзера впервые активировавшего бота"""
     def __init__(self, tg_user: TgUser, tg_client: TgClient):
         super().__init__(tg_user, tg_client)
         self._text = f'Добро пожаловать в TaskTG бот\n\nЕсли вы не зарегистрированы, пройдите регистрацию ' \
@@ -43,6 +44,7 @@ class NewUserState(BaseTgUserState):
 
 
 class UnverifiedUserState(BaseTgUserState):
+    """Класс юзера активировавшего бота, но не прошедшего верификацию"""
     def __init__(self, tg_user: TgUser, tg_client: TgClient):
         super().__init__(tg_user, tg_client)
         self._text = 'Если вы не зарегистрированы, пройдите регистрацию ' \
@@ -53,6 +55,7 @@ class UnverifiedUserState(BaseTgUserState):
 
 
 class VerifiedUserState(BaseTgUserState):
+    """Класс юзера прошедшего верификацию"""
     user_state_create: bool = False  # Состояние пользователя, создает ли он Цель
     category_for_create_goal: GoalCategory | None = None  # Категория в которой будет создаваться Цель
 
@@ -86,7 +89,7 @@ class VerifiedUserState(BaseTgUserState):
             case _:
                 self._message_execution()
 
-    def _get_data_from_category(self, mes_text):
+    def _get_data_from_category(self, mes_text: str):
         """Получение данных выбранной категории для создания цели"""
         VerifiedUserState.category_for_create_goal = GoalCategory.objects.select_related('user').filter(
             title=mes_text[1:], is_deleted=False).first()

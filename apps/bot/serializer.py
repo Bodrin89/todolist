@@ -18,6 +18,6 @@ class TgUserSerializer(serializers.ModelSerializer):
             raise ValidationError('Code is incorrect')
         return value
 
-    def update(self, instance, validated_data):
+    def update(self, instance: dict, validated_data: dict):
         self.instance.user = self.context['request'].user
         return super().update(instance, validated_data)

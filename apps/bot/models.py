@@ -6,10 +6,10 @@ from apps.core.models import User
 
 
 class TgUser(models.Model):
-    telegram_chat_id = models.PositiveIntegerField()
-    telegram_user_ud = models.CharField(max_length=250)
-    verification_code = models.CharField(max_length=250, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    telegram_chat_id: int = models.PositiveIntegerField()
+    telegram_user_ud: int = models.CharField(max_length=250)
+    verification_code: str = models.CharField(max_length=250, null=True, blank=True)
+    user: User = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     @staticmethod
     def __gen_code() -> str:

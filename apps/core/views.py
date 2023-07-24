@@ -18,7 +18,7 @@ class LoginView(CreateAPIView):
     """Вход по имени и паролю"""
     serializer_class = LoginSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         login(request=request, user=serializer.save())
@@ -31,10 +31,10 @@ class ProfileView(RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
+    def get_object(self) -> User:
         return self.request.user
 
-    def perform_destroy(self, instance):
+    def perform_destroy(self, instance: User):
         """Logout текущего пользователя"""
         logout(self.request)
 
@@ -45,5 +45,5 @@ class UpdatePassword(UpdateAPIView):
     serializer_class = UpdatePasswordSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
+    def get_object(self) -> User:
         return self.request.user

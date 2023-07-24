@@ -5,7 +5,7 @@ from typing import Any
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.request import Request
 
-from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory, GoalComment
+from apps.goals.models import Board, BoardParticipant, Goal, GoalCategory
 
 
 class BoardPermission(IsAuthenticated):

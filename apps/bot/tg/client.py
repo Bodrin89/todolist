@@ -11,7 +11,7 @@ class TgClient:
     def __init__(self, token):
         self.token = token
 
-    def get_url(self, method: str):
+    def get_url(self, method: str) -> str:
         """Создание url"""
         return f'https://api.telegram.org/bot{self.token}/{method}'
 
