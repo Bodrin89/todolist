@@ -120,7 +120,10 @@ class VerifiedUserState(BaseTgUserState):
         list_goals = list(Goal.objects.select_related('user').filter(user_id=user_id,
                                                                      category__is_deleted=False).exclude(
             status=Goal.Status.archived).values_list('title', flat=True))
-        self.tg_client.send_message(self.message.chat.id, text='\n\n'.join(list_goals))
+        if list_goals:
+            self.tg_client.send_message(self.message.chat.id, text='\n\n'.join(list_goals))
+        else:
+            self.tg_client.send_message(self.message.chat.id, text='У вас нет созданных целей')
 
     def _choices_category(self):
         """Выбор категории из списка"""
