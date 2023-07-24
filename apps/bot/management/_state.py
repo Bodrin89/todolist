@@ -36,11 +36,10 @@ class BaseTgUserState:
 class NewUserState(BaseTgUserState):
     def __init__(self, tg_user: TgUser, tg_client: TgClient):
         super().__init__(tg_user, tg_client)
-        self._text = f'Добро пожаловать в TaskTG бот\nЕсли вы не зарегистрированы, пройдите регистрацию' \
-                     f' <a href="{URL_SIGNUP}">по ссылке</a>\nИли войдите в аккаунт' \
-                     f' <a href="{URL_LOGIN}">по ссылке</a>' \
-                     f' \nПодтвердите, пожалуйста, ' \
-                     f'свой аккаунт. ' \
+        self._text = f'Добро пожаловать в TaskTG бот\n\nЕсли вы не зарегистрированы, пройдите регистрацию ' \
+                     f'<a href="{URL_SIGNUP}">по ссылке</a>' \
+                     f'\nили войдите в аккаунт <a href="{URL_LOGIN}">по ссылке</a>' \
+                     f' \nЕсли вы зарегистрированы подтвердите, пожалуйста, свой аккаунт. ' \
                      f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}\n' \
                      f'<a href="{URL_VERIFY_COD}">на сайте</a>'
 
@@ -48,11 +47,10 @@ class NewUserState(BaseTgUserState):
 class UnverifiedUserState(BaseTgUserState):
     def __init__(self, tg_user: TgUser, tg_client: TgClient):
         super().__init__(tg_user, tg_client)
-        self._text = 'Если вы не зарегистрированы, пройдите регистрацию' \
-                     f' <a href="{URL_SIGNUP}">по ссылке</a>\nИли войдите в аккаунт' \
-                     f' <a href="{URL_LOGIN}">по ссылке</a>' \
-                     f' \nПодтвердите, пожалуйста, ' \
-                     f'свой аккаунт. ' \
+        self._text = 'Если вы не зарегистрированы, пройдите регистрацию ' \
+                     f'<a href="{URL_SIGNUP}">по ссылке</a>' \
+                     f'\nили войдите в аккаунт <a href="{URL_LOGIN}">по ссылке</a>' \
+                     f' \nЕсли вы зарегистрированы подтвердите, пожалуйста, свой аккаунт. ' \
                      f'Для подтверждения необходимо ввести код: \n{self.get_verification_code()}\n' \
                      f'<a href="{URL_VERIFY_COD}">на сайте</a>'
 
