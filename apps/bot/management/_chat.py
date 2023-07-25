@@ -1,3 +1,4 @@
+
 from apps.bot.management._state import BaseTgUserState, NewUserState, UnverifiedUserState, VerifiedUserState
 from apps.bot.models import TgUser
 from apps.bot.tg.client import TgClient
@@ -9,7 +10,7 @@ class Chat:
         self.__state: BaseTgUserState | None = None
 
     @property
-    def state(self) -> BaseTgUserState | None:
+    def state(self) -> BaseTgUserState | RuntimeError:
         if self.__state:
             return self.__state
         else:

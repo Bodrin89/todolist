@@ -15,26 +15,17 @@ class TgClient:
     def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdatesResponse:
         url = self.get_url('getUpdates')
         params = {'offset': offset, 'timeout': timeout}
-        try:
-            response = requests.get(url, params)
-            return GetUpdatesResponse(**response.json())
-        except Exception as e:
-            raise e
+        response = requests.get(url, params)
+        return GetUpdatesResponse(**response.json())
 
     def send_message(self, chat_id: int, text: str, parse_mode='HTML') -> SendMessageResponse:
         url = self.get_url('sendMessage')
         data = {'chat_id': chat_id, 'text': text, 'parse_mode': parse_mode}
-        try:
-            response = requests.post(url, data)
-            return SendMessageResponse(**response.json())
-        except Exception as e:
-            raise e
+        response = requests.post(url, data)
+        return SendMessageResponse(**response.json())
 
     def send_photo(self, chat_id: int, photo) -> SendPhotoResponse:
         url = self.get_url('sendPhoto')
         data = {'chat_id': chat_id, 'photo': photo}
-        try:
-            response = requests.post(url, data)
-            return SendPhotoResponse(**response.json())
-        except Exception as e:
-            raise e
+        response = requests.post(url, data)
+        return SendPhotoResponse(**response.json())
