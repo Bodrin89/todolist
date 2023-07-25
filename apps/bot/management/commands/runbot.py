@@ -2,9 +2,7 @@ from django.core.management.base import BaseCommand
 
 from apps.bot.management._chat import Chat
 from apps.bot.tg.client import TgClient
-from todolist.settings import env
-
-BOT_TOKEN = env('BOT_TOKEN')
+from todolist.settings import BOT_TOKEN
 
 
 class Command(BaseCommand):

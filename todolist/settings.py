@@ -179,6 +179,8 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Планировщик задач'
 }
 
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+
 # Определение пути к файлу лога
 current_date = datetime.now().strftime('%Y-%m-%d-%H-%M')
 filename = f'log_{current_date}.log'

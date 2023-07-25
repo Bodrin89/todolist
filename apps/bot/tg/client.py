@@ -1,9 +1,6 @@
 import requests
 
 from apps.bot.tg.dc import GetUpdatesResponse, SendMessageResponse, SendPhotoResponse
-from todolist.settings import env
-
-BOT_TOKEN = env('BOT_TOKEN')
 
 
 class TgClient:

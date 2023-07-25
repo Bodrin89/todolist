@@ -4,9 +4,7 @@ from rest_framework.response import Response
 
 from apps.bot.serializer import TgUserSerializer
 from apps.bot.tg.client import TgClient
-from todolist.settings import env
-
-BOT_TOKEN = env('BOT_TOKEN')
+from todolist.settings import BOT_TOKEN
 
 
 class BotVerifyView(generics.UpdateAPIView):
